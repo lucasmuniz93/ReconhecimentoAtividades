@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="BotaoTamanho">8.5dp</dimen>
+    <dimen name="BotaoLargura">100dp</dimen>
+    <dimen name="ValorCoordenda">20sp</dimen>
+    <dimen name="ValorTextoBotao">10sp</dimen>
+    <dimen name="ValorAtividadeIntensidade">20sp</dimen>
+
+</resources>
