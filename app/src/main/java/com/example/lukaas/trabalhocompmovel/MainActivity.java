@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // Criar o Sensor Manager
         SM = (SensorManager) getSystemService(SENSOR_SERVICE);
         // Acelerometro Sensor
-        mySensor = SM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mySensor = SM.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         // Registrar o listener
         SM.registerListener(this,mySensor,SensorManager.SENSOR_DELAY_NORMAL);
 

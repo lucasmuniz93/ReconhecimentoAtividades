@@ -21,9 +21,7 @@ import java.util.ArrayList;
 
 public class ReconhecimentoActivity extends AppCompatActivity implements SensorEventListener{
 
-    private static  double rms;
-    private static  float media;
-    private static float variancia;
+    private float[] gravity = new float[3];
     private static Object[] parametros = new Object[7];
 
 
@@ -50,6 +48,7 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
     private TextView txtResposta;
     private ImageView imgAtividade;
     private Switch switchSom;
+    private Switch switchGravidade;
     private MediaPlayer mediaPlayer;
     private int flagAudio = 10;
 
@@ -59,6 +58,7 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
 
     // Classe Weka que verifica a identidade e intensidade;
     private WekaWrapper weka = new WekaWrapper();
+    private WekaWrapperSemGravidade wekaSemGravidade = new WekaWrapperSemGravidade();
 
     // Recebe o retorno da atividade do weka
     private static double resposta = -1;
@@ -71,6 +71,7 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
         //Cast
         atividade = (TextView) findViewById(R.id.txtAtividade2);
         switchSom = (Switch) findViewById(R.id.switch2);
+        switchGravidade = (Switch) findViewById(R.id.switchGravidade);
         imgAtividade = (ImageView) findViewById(R.id.imgAtividade);
         txtMediaX = (TextView) findViewById(R.id.txtMediaX);
         txtMediaY = (TextView) findViewById(R.id.txtMediaY);
@@ -135,22 +136,42 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
 
             // Envio para a classe do Weka o Object[]
             try {
-                resposta = WekaWrapper.classify(parametros);
-               // Toast.makeText(this, ""+ resposta, Toast.LENGTH_SHORT).show();
+                if(switchGravidade.isChecked()){
+                    resposta = WekaWrapper.classify(parametros);
+                }else{
+                    resposta = WekaWrapperSemGravidade.classify(parametros);
+                }
+                // Toast.makeText(this, ""+ resposta, Toast.LENGTH_SHORT).show();
             }catch (Exception e){
                 Toast.makeText(this, ""+ e, Toast.LENGTH_SHORT).show();
             }
             // Verifica a resposta retornada pelo Weka e exibe na tela
-            //txtResposta.setText(""+resposta);
             VerificaResposta(resposta);
 
             EsvaziarArray();
 
         }else{
             // Se o tempo for menor que a janela, salvo no array
-            arrayX.add(sensorEvent.values[0]);
-            arrayY.add(sensorEvent.values[1]);
-            arrayZ.add(sensorEvent.values[2]);
+
+            if(switchGravidade.isChecked()) {
+                //Considerando a gravidade
+                arrayX.add(sensorEvent.values[0]);
+                arrayY.add((sensorEvent.values[1] * -1));
+                arrayZ.add(sensorEvent.values[2]);
+
+            }else{
+                // Não considerando a gravidade
+                final float alpha = 0.8f;
+
+                gravity[0] = (alpha * gravity[0]) + ((1 - alpha) * sensorEvent.values[0]);
+                gravity[1] = (alpha * gravity[1]) + ((1 - alpha) * sensorEvent.values[1]);
+                gravity[2] = (alpha * gravity[2]) + ((1 - alpha) * sensorEvent.values[2]);
+
+
+                arrayX.add((sensorEvent.values[0] - gravity[0]));
+                arrayY.add(((sensorEvent.values[1] * -1) - gravity[1]));
+                arrayZ.add((sensorEvent.values[2] - gravity[2]));
+            }
         }
 
     }
@@ -165,62 +186,62 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
 
         // Andando Leve
         if(p == 0){
-           atividade.setText("Andando Leve");
-           imgAtividade.setImageResource(R.drawable.andandoleve);
+            atividade.setText("Andando Leve");
+            imgAtividade.setImageResource(R.drawable.andandoleve);
             // Verifica se a opcao do som esta ativada
             if(switchSom.isChecked()){
                 ExecutarAudio(R.raw.andandoleve);
             }
-        // Andando Moderado
+            // Andando Moderado
         }else if(p == 1){
             atividade.setText("Andando Moderado");
             imgAtividade.setImageResource(R.drawable.andandomoderado);
             if(switchSom.isChecked()){
                 ExecutarAudio(R.raw.andandomoderado);
             }
-        // Andando Vigoroso
+            // Andando Vigoroso
         }else if(p == 2){
             atividade.setText("Andando Vigoroso");
             imgAtividade.setImageResource(R.drawable.andandovigoroso);
             if(switchSom.isChecked()){
                 ExecutarAudio(R.raw.andandovigoroso);
             }
-        // Sentado Leve
+            // Sentado Leve
         }else if(p == 3){
             atividade.setText("Sentado Leve");
             imgAtividade.setImageResource(R.drawable.sentadoleve);
             if(switchSom.isChecked()){
                 ExecutarAudio(R.raw.sentadoleve);
             }
-        // Sentado Moderado
+            // Sentado Moderado
         }else if(p == 4){
             atividade.setText("Sentado Moderado");
             imgAtividade.setImageResource(R.drawable.sentadomoderado);
             if(switchSom.isChecked()){
                 ExecutarAudio(R.raw.sentadomoderado);
             }
-        // Sentado Vigoroso
+            // Sentado Vigoroso
         }else if(p == 5){
             atividade.setText("Sentado Vigoroso");
             imgAtividade.setImageResource(R.drawable.sentadovigoroso);
             if(switchSom.isChecked()){
                 ExecutarAudio(R.raw.sentadovigoroso);
             }
-        // Deitado Leve
+            // Deitado Leve
         }else if(p == 6){
             atividade.setText("Deitado Leve");
             imgAtividade.setImageResource(R.drawable.deitadoleve);
             if(switchSom.isChecked()){
                 ExecutarAudio(R.raw.deitadoleve);
             }
-        // Deitado Moderado
+            // Deitado Moderado
         }else if(p == 7){
             atividade.setText("Deitado Moderado");
             imgAtividade.setImageResource(R.drawable.deitadomoderado);
             if(switchSom.isChecked()){
                 ExecutarAudio(R.raw.deitadomoderado);
             }
-        // Deitado Vigoroso
+            // Deitado Vigoroso
         }else if(p == 8){
             atividade.setText("Deitado Vigoroso");
             imgAtividade.setImageResource(R.drawable.deitadovigoroso);
@@ -228,7 +249,7 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
                 ExecutarAudio(R.raw.deitadovigoroso);
             }
         }
-  }
+    }
 
     private boolean VerificaJanela(){
         double t =(double) ((System.currentTimeMillis() - tempoStart)/1000);
@@ -263,7 +284,6 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
 
         String r = ""+total/i;
         parametros[pos] =  Double.parseDouble(r);
-        media = total/i;
         return total/i;
     }
 
@@ -325,11 +345,10 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
         super.onDestroy();
 
         //Liberar os recusos utilizados pelo mediaPlayer ao fechar o aplicativo
-        if((mediaPlayer != null)){
+        if ((mediaPlayer != null)) {
             mediaPlayer.stop();
             mediaPlayer.release();
-            mediaPlayer = null;
         }
-
     }
 }
+    
