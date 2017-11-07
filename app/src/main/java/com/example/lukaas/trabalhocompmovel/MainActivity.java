@@ -227,7 +227,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         flagModerado = false;
         flagVigoroso = false;
    }
+    @Override
+    protected void onPause() {
+        super.onPause();
 
+        SM.unregisterListener(this, mySensor);
+
+    }
    private void EscreverArquivo(String atividade, String intensidade, String x, String y, String z){
         Calendar c =  Calendar.getInstance();
     if(((System.currentTimeMillis()-tempoStart)/1000) >= 60){

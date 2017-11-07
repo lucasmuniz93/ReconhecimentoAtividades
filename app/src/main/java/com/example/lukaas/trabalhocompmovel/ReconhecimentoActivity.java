@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +50,7 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
     private ImageView imgAtividade;
     private Switch switchSom;
     private Switch switchGravidade;
+    private SeekBar seekBarTempoJanela;
     private MediaPlayer mediaPlayer;
     private int flagAudio = 10;
 
@@ -83,6 +85,7 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
         txtTempo = (TextView) findViewById(R.id.txtTempo);
         txtTempoJanela = (TextView) findViewById(R.id.txtTempoJanela);
         txtResposta = (TextView) findViewById(R.id.txtResposta);
+        seekBarTempoJanela = (SeekBar) findViewById(R.id.seekBarTempoJanela);
 
         // Criar o Sensor Manager
         SM = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -92,7 +95,34 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
         SM.registerListener(this,mySensor,SensorManager.SENSOR_DELAY_NORMAL);
 
         tempoStart = System.currentTimeMillis();
-        txtTempoJanela.setText("" + TAMANHO_JANELA);
+        txtTempoJanela.setText("" + seekBarTempoJanela.getProgress());
+
+        // SeekBar progresso
+        seekBarTempoJanela.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if(seekBarTempoJanela.getProgress() == 0){
+                    TAMANHO_JANELA = 1;
+                    txtTempoJanela.setText(""+TAMANHO_JANELA);
+                }else if(seekBarTempoJanela.getProgress() == 1){
+                    TAMANHO_JANELA = 2.5;
+                    txtTempoJanela.setText(""+TAMANHO_JANELA);
+                }else{
+                    TAMANHO_JANELA = 5;
+                    txtTempoJanela.setText(""+TAMANHO_JANELA);
+                }
+            }
+        });
     }
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
@@ -341,14 +371,37 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStart() {
+        super.onStart();
+        Toast.makeText(this, "START", Toast.LENGTH_SHORT).show();
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Toast.makeText(this, "PAUSE", Toast.LENGTH_SHORT).show();
         //Liberar os recusos utilizados pelo mediaPlayer ao fechar o aplicativo
         if ((mediaPlayer != null)) {
             mediaPlayer.stop();
             mediaPlayer.release();
         }
+
+        SM.unregisterListener(this, mySensor);
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Toast.makeText(this, "STOP", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this, "DESTROY", Toast.LENGTH_SHORT).show();
+
+
     }
 }
     
