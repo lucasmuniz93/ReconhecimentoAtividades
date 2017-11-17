@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class MainActivity2 extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     private Button btnColetarDados;
     private Button btnAnalisarAtividade;
@@ -22,14 +22,14 @@ public class MainActivity2 extends AppCompatActivity {
         btnAnalisarAtividade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity2.this,ReconhecimentoActivity.class));
+                startActivity(new Intent(MainActivity.this,ReconhecimentoActivity.class));
             }
         });
 
         btnColetarDados.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity2.this,ColetaActivity.class));
+                startActivity(new Intent(MainActivity.this,ColetaActivity.class));
             }
         });
     }
