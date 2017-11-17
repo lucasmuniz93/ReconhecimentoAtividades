@@ -5,5 +5,7 @@
     <dimen name="ValorCoordenda">20sp</dimen>
     <dimen name="ValorTextoBotao">10sp</dimen>
     <dimen name="ValorAtividadeIntensidade">20sp</dimen>
+    <dimen name="TamanhoTextoColeta">18sp</dimen>
+    <dimen name="TamanhoImgColeta15x15">15dip</dimen>
 
 </resources>

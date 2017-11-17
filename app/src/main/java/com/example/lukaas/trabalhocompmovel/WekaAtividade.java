@@ -3,18 +3,13 @@ package com.example.lukaas.trabalhocompmovel;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-public class WekaWrapper extends AppCompatActivity {
+public class WekaAtividade {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reconhecimento);
-    }
     public static double classify(Object[] i)
             throws Exception {
 
         double p = Double.NaN;
-        p = WekaWrapper.N4d18ab6c80(i);
+        p = WekaAtividade.N4d18ab6c80(i);
         return p;
     }
     static double N4d18ab6c80(Object []i) {
@@ -22,9 +17,9 @@ public class WekaWrapper extends AppCompatActivity {
         if (i[3] == null) {
             p = 4;
         } else if (((Double) i[3]).doubleValue() <= -7.44524) {
-            p = WekaWrapper.N233a10d181(i);
+            p = WekaAtividade.N233a10d181(i);
         } else if (((Double) i[3]).doubleValue() > -7.44524) {
-            p = WekaWrapper.N49c8eef0110(i);
+            p = WekaAtividade.N49c8eef0110(i);
         }
         return p;
     }
@@ -33,9 +28,9 @@ public class WekaWrapper extends AppCompatActivity {
         if (i[2] == null) {
             p = 4;
         } else if (((Double) i[2]).doubleValue() <= 0.638822) {
-            p = WekaWrapper.N193825882(i);
+            p = WekaAtividade.N193825882(i);
         } else if (((Double) i[2]).doubleValue() > 0.638822) {
-            p = WekaWrapper.N504e4ea187(i);
+            p = WekaAtividade.N504e4ea187(i);
         }
         return p;
     }
@@ -44,9 +39,9 @@ public class WekaWrapper extends AppCompatActivity {
         if (i[2] == null) {
             p = 3;
         } else if (((Double) i[2]).doubleValue() <= 0.012488) {
-            p = WekaWrapper.N5da6d7a783(i);
+            p = WekaAtividade.N5da6d7a783(i);
         } else if (((Double) i[2]).doubleValue() > 0.012488) {
-            p = WekaWrapper.N26a26a5085(i);
+            p = WekaAtividade.N26a26a5085(i);
         }
         return p;
     }
@@ -55,7 +50,7 @@ public class WekaWrapper extends AppCompatActivity {
         if (i[0] == null) {
             p = 3;
         } else if (((Double) i[0]).doubleValue() <= 0.182569) {
-            p = WekaWrapper.N556d44b484(i);
+            p = WekaAtividade.N556d44b484(i);
         } else if (((Double) i[0]).doubleValue() > 0.182569) {
             p = 4;
         }
@@ -77,7 +72,7 @@ public class WekaWrapper extends AppCompatActivity {
         if (i[2] == null) {
             p = 4;
         } else if (((Double) i[2]).doubleValue() <= 0.097223) {
-            p = WekaWrapper.N3bbead9e86(i);
+            p = WekaAtividade.N3bbead9e86(i);
         } else if (((Double) i[2]).doubleValue() > 0.097223) {
             p = 5;
         }
@@ -99,9 +94,9 @@ public class WekaWrapper extends AppCompatActivity {
         if (i[0] == null) {
             p = 0;
         } else if (((Double) i[0]).doubleValue() <= 6.904059) {
-            p = WekaWrapper.N6f39e8f888(i);
+            p = WekaAtividade.N6f39e8f888(i);
         } else if (((Double) i[0]).doubleValue() > 6.904059) {
-            p = WekaWrapper.N4cfcf89b104(i);
+            p = WekaAtividade.N4cfcf89b104(i);
         }
         return p;
     }
@@ -110,9 +105,9 @@ public class WekaWrapper extends AppCompatActivity {
         if (i[2] == null) {
             p = 0;
         } else if (((Double) i[2]).doubleValue() <= 3.436413) {
-            p = WekaWrapper.N5afcffa589(i);
+            p = WekaAtividade.N5afcffa589(i);
         } else if (((Double) i[2]).doubleValue() > 3.436413) {
-            p = WekaWrapper.N6c4aefb5100(i);
+            p = WekaAtividade.N6c4aefb5100(i);
         }
         return p;
     }
@@ -121,9 +116,9 @@ public class WekaWrapper extends AppCompatActivity {
         if (i[1] == null) {
             p = 0;
         } else if (((Double) i[1]).doubleValue() <= -0.689272) {
-            p = WekaWrapper.N14607b3990(i);
+            p = WekaAtividade.N14607b3990(i);
         } else if (((Double) i[1]).doubleValue() > -0.689272) {
-            p = WekaWrapper.N4210575295(i);
+            p = WekaAtividade.N4210575295(i);
         }
         return p;
     }
@@ -134,7 +129,7 @@ public class WekaWrapper extends AppCompatActivity {
         } else if (((Double) i[4]).doubleValue() <= 1.967939) {
             p = 0;
         } else if (((Double) i[4]).doubleValue() > 1.967939) {
-            p = WekaWrapper.N3679045291(i);
+            p = WekaAtividade.N3679045291(i);
         }
         return p;
     }
@@ -145,7 +140,7 @@ public class WekaWrapper extends AppCompatActivity {
         } else if (((Double) i[1]).doubleValue() <= -1.923319) {
             p = 1;
         } else if (((Double) i[1]).doubleValue() > -1.923319) {
-            p = WekaWrapper.N16a7544d92(i);
+            p = WekaAtividade.N16a7544d92(i);
         }
         return p;
     }
@@ -156,7 +151,7 @@ public class WekaWrapper extends AppCompatActivity {
         } else if (((Double) i[0]).doubleValue() <= 1.544581) {
             p = 1;
         } else if (((Double) i[0]).doubleValue() > 1.544581) {
-            p = WekaWrapper.N2b1b90eb93(i);
+            p = WekaAtividade.N2b1b90eb93(i);
         }
         return p;
     }
@@ -167,7 +162,7 @@ public class WekaWrapper extends AppCompatActivity {
         } else if (((Double) i[4]).doubleValue() <= 3.1772) {
             p = 0;
         } else if (((Double) i[4]).doubleValue() > 3.1772) {
-            p = WekaWrapper.N3cb59f0294(i);
+            p = WekaAtividade.N3cb59f0294(i);
         }
         return p;
     }
@@ -187,7 +182,7 @@ public class WekaWrapper extends AppCompatActivity {
         if (i[5] == null) {
             p = 0;
         } else if (((Double) i[5]).doubleValue() <= 2.847387) {
-            p = WekaWrapper.N6eb9766196(i);
+            p = WekaAtividade.N6eb9766196(i);
         } else if (((Double) i[5]).doubleValue() > 2.847387) {
             p = 2;
         }
@@ -198,7 +193,7 @@ public class WekaWrapper extends AppCompatActivity {
         if (i[0] == null) {
             p = 0;
         } else if (((Double) i[0]).doubleValue() <= 2.626981) {
-            p = WekaWrapper.N19d22f9597(i);
+            p = WekaAtividade.N19d22f9597(i);
         } else if (((Double) i[0]).doubleValue() > 2.626981) {
             p = 5;
         }
@@ -211,7 +206,7 @@ public class WekaWrapper extends AppCompatActivity {
         } else if (((Double) i[0]).doubleValue() <= 0.90812) {
             p = 5;
         } else if (((Double) i[0]).doubleValue() > 0.90812) {
-            p = WekaWrapper.N90ffe2298(i);
+            p = WekaAtividade.N90ffe2298(i);
         }
         return p;
     }
@@ -220,7 +215,7 @@ public class WekaWrapper extends AppCompatActivity {
         if (i[2] == null) {
             p = 0;
         } else if (((Double) i[2]).doubleValue() <= 1.275139) {
-            p = WekaWrapper.N49e5929699(i);
+            p = WekaAtividade.N49e5929699(i);
         } else if (((Double) i[2]).doubleValue() > 1.275139) {
             p = 0;
         }
@@ -244,7 +239,7 @@ public class WekaWrapper extends AppCompatActivity {
         } else if (((Double) i[4]).doubleValue() <= 0.833591) {
             p = 3;
         } else if (((Double) i[4]).doubleValue() > 0.833591) {
-            p = WekaWrapper.N64ecdb2e101(i);
+            p = WekaAtividade.N64ecdb2e101(i);
         }
         return p;
     }
@@ -255,7 +250,7 @@ public class WekaWrapper extends AppCompatActivity {
         } else if (((Double) i[5]).doubleValue() <= -0.270005) {
             p = 1;
         } else if (((Double) i[5]).doubleValue() > -0.270005) {
-            p = WekaWrapper.N1264d77f102(i);
+            p = WekaAtividade.N1264d77f102(i);
         }
         return p;
     }
@@ -264,7 +259,7 @@ public class WekaWrapper extends AppCompatActivity {
         if (i[1] == null) {
             p = 1;
         } else if (((Double) i[1]).doubleValue() <= -0.534362) {
-            p = WekaWrapper.N77709687103(i);
+            p = WekaAtividade.N77709687103(i);
         } else if (((Double) i[1]).doubleValue() > -0.534362) {
             p = 0;
         }
@@ -286,9 +281,9 @@ public class WekaWrapper extends AppCompatActivity {
         if (i[2] == null) {
             p = 1;
         } else if (((Double) i[2]).doubleValue() <= 6.496885) {
-            p = WekaWrapper.N4e4b6f81105(i);
+            p = WekaAtividade.N4e4b6f81105(i);
         } else if (((Double) i[2]).doubleValue() > 6.496885) {
-            p = WekaWrapper.N2204fafc108(i);
+            p = WekaAtividade.N2204fafc108(i);
         }
         return p;
     }
@@ -297,9 +292,9 @@ public class WekaWrapper extends AppCompatActivity {
         if (i[1] == null) {
             p = 0;
         } else if (((Double) i[1]).doubleValue() <= -1.588002) {
-            p = WekaWrapper.N7a208618106(i);
+            p = WekaAtividade.N7a208618106(i);
         } else if (((Double) i[1]).doubleValue() > -1.588002) {
-            p = WekaWrapper.N997e375107(i);
+            p = WekaAtividade.N997e375107(i);
         }
         return p;
     }
@@ -330,7 +325,7 @@ public class WekaWrapper extends AppCompatActivity {
         if (i[2] == null) {
             p = 2;
         } else if (((Double) i[2]).doubleValue() <= 10.207135) {
-            p = WekaWrapper.N37a6be5a109(i);
+            p = WekaAtividade.N37a6be5a109(i);
         } else if (((Double) i[2]).doubleValue() > 10.207135) {
             p = 2;
         }
@@ -352,9 +347,9 @@ public class WekaWrapper extends AppCompatActivity {
         if (i[0] == null) {
             p = 6;
         } else if (((Double) i[0]).doubleValue() <= 3.409034) {
-            p = WekaWrapper.N7ff220f7111(i);
+            p = WekaAtividade.N7ff220f7111(i);
         } else if (((Double) i[0]).doubleValue() > 3.409034) {
-            p = WekaWrapper.N2b96bd54117(i);
+            p = WekaAtividade.N2b96bd54117(i);
         }
         return p;
     }
@@ -365,7 +360,7 @@ public class WekaWrapper extends AppCompatActivity {
         } else if (((Double) i[4]).doubleValue() <= 0.008856) {
             p = 6;
         } else if (((Double) i[4]).doubleValue() > 0.008856) {
-            p = WekaWrapper.N7aa4f6ef112(i);
+            p = WekaAtividade.N7aa4f6ef112(i);
         }
         return p;
     }
@@ -374,9 +369,9 @@ public class WekaWrapper extends AppCompatActivity {
         if (i[1] == null) {
             p = 7;
         } else if (((Double) i[1]).doubleValue() <= 7.038155) {
-            p = WekaWrapper.N78f2c38f113(i);
+            p = WekaAtividade.N78f2c38f113(i);
         } else if (((Double) i[1]).doubleValue() > 7.038155) {
-            p = WekaWrapper.N4596e0d2116(i);
+            p = WekaAtividade.N4596e0d2116(i);
         }
         return p;
     }
@@ -387,7 +382,7 @@ public class WekaWrapper extends AppCompatActivity {
         } else if (((Double) i[3]).doubleValue() <= 0.646035) {
             p = 7;
         } else if (((Double) i[3]).doubleValue() > 0.646035) {
-            p = WekaWrapper.N76431d0f114(i);
+            p = WekaAtividade.N76431d0f114(i);
         }
         return p;
     }
@@ -398,7 +393,7 @@ public class WekaWrapper extends AppCompatActivity {
         } else if (((Double) i[1]).doubleValue() <= 2.797038) {
             p = 7;
         } else if (((Double) i[1]).doubleValue() > 2.797038) {
-            p = WekaWrapper.N18d87ea8115(i);
+            p = WekaAtividade.N18d87ea8115(i);
         }
         return p;
     }
@@ -431,7 +426,7 @@ public class WekaWrapper extends AppCompatActivity {
         } else if (((Double) i[4]).doubleValue() <= 1.181897) {
             p = 7;
         } else if (((Double) i[4]).doubleValue() > 1.181897) {
-            p = WekaWrapper.N4553664c118(i);
+            p = WekaAtividade.N4553664c118(i);
         }
         return p;
     }
@@ -440,7 +435,7 @@ public class WekaWrapper extends AppCompatActivity {
         if (i[0] == null) {
             p = 8;
         } else if (((Double) i[0]).doubleValue() <= 9.019775) {
-            p = WekaWrapper.N1ea56d70119(i);
+            p = WekaAtividade.N1ea56d70119(i);
         } else if (((Double) i[0]).doubleValue() > 9.019775) {
             p = 8;
         }
