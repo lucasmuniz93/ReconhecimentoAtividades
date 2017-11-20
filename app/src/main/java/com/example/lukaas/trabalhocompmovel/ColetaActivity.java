@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 public class ColetaActivity extends AppCompatActivity implements SensorEventListener{
     // Botões
-    private Button Gravar, Andando, Deitado, Sentado, Leve, Moderado, Vigoroso;
+    private Button Gravar, Resetar, Andando, Deitado, Sentado, Leve, Moderado, Vigoroso;
     // TextViews
     private EditText txtNome;
     //Imagens
@@ -43,6 +43,7 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
 
     //Arquivo
     private File file;
+    File dir;
     private FileOutputStream arquivoSaida;
 
     // Cronometro
@@ -62,6 +63,7 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
         Moderado = (Button) findViewById(R.id.btnModerado);
         Vigoroso = (Button) findViewById(R.id.btnVigoroso);
         Gravar = (Button) findViewById(R.id.btnGravar);
+        Resetar = (Button) findViewById(R.id.btnResetar);
 
         txtNome = (EditText) findViewById(R.id.txtNome);
 
@@ -81,6 +83,8 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
 
         ResetarCorBotaoAtividade();
         ResetarCorBotaoIntensidade();
+        ResetarAtividadeFinalizada();
+        flagCriarPasta = true;
 
         // Criar o Sensor Manager
         SM = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -176,8 +180,6 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
         Gravar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 if(flagAndando || flagDeitado || flagSentado){
                     if(flagLeve || flagModerado || flagVigoroso ){
                         if(txtNome.getText().toString().equals("")){
@@ -197,12 +199,23 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
                     Gravar.setText("Gravando");
                     Gravar.setBackgroundColor(Color.GREEN);
                     tempoStart = System.currentTimeMillis();
-                    flagCriarPasta = true;
                 }else{
                     Gravar.setText("Gravar");
                     Gravar.setBackgroundColor(Color.LTGRAY);
-                    flagCriarPasta = false;
                 }
+            }
+        });
+
+        Resetar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ResetarCorBotaoIntensidade();
+                ResetarCorBotaoAtividade();
+                ResetarParametroIntensidade();
+                ResetarParamentroAtividade();
+                ResetarAtividadeFinalizada();
+                flagCriarPasta = true;
+                txtNome.setText("");
             }
         });
 
@@ -211,19 +224,19 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
 
+        if(flagGravar) {
+            final String x = " " + sensorEvent.values[0];
+            final String y = " " + sensorEvent.values[1];
+            final String z = " " + sensorEvent.values[2];
 
-        final String x = " "+sensorEvent.values[0];
-        final String y = " "+sensorEvent.values[1];
-        final String z = " "+sensorEvent.values[2];
+            final String atividade = VerificaAtividade();
+            final String intensidade = VerificaIntensidade();
 
-        final String atividade= VerificaAtividade();
-        final String intensidade= VerificaIntensidade();
-
-        //Salvar no Arquivo
-          if(flagGravar){
-              EscreverArquivo(atividade,intensidade,x, y, z);
-          }
-
+            //Salvar no Arquivo
+            if (flagGravar) {
+                EscreverArquivo(atividade, intensidade, x, y, z);
+            }
+        }
 
     }
 
@@ -260,6 +273,8 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
        Vigoroso.setBackgroundColor(Color.LTGRAY);
    }
 
+
+
    private String VerificaAtividade(){
      if(flagAndando){
          return "Andando";
@@ -282,9 +297,52 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
 
         return null;
     }
-   private void MarcaAtividadeFinalizada(){
+   private void MarcaAtividadeFinalizada(boolean flagAndando, boolean flagDeitado, boolean flagSentado,
+                                         boolean flagLeve, boolean flagModerado, boolean flagVigoroso){
+
+       if(flagAndando){
+           if(flagLeve){
+               imgAndandoLeve.setImageResource(R.drawable.atividadecompleta);
+           }else if(flagModerado){
+               imgAndandoModerado.setImageResource(R.drawable.atividadecompleta);
+           }else if(flagVigoroso){
+               imgAndandoVigoroso.setImageResource(R.drawable.atividadecompleta);
+           }
+       }else if(flagSentado){
+           if(flagLeve){
+               imgSentadoLeve.setImageResource(R.drawable.atividadecompleta);
+           }else if(flagModerado){
+               imgSentadoModerado.setImageResource(R.drawable.atividadecompleta);
+           }else if(flagVigoroso){
+               imgSentadoVigoroso.setImageResource(R.drawable.atividadecompleta);
+           }
+       } else if(flagDeitado){
+            if(flagLeve){
+                imgDeitadoLeve.setImageResource(R.drawable.atividadecompleta);
+            }else if(flagModerado){
+                imgDeitadoModerado.setImageResource(R.drawable.atividadecompleta);
+            }else if(flagVigoroso){
+                imgDeitadoVigoroso.setImageResource(R.drawable.atividadecompleta);
+            }
+    }
+
 
    }
+
+    private  void  ResetarAtividadeFinalizada(){
+
+        imgAndandoLeve.setImageResource(R.drawable.atividadenaocompleta);
+        imgAndandoModerado.setImageResource(R.drawable.atividadenaocompleta);
+        imgAndandoVigoroso.setImageResource(R.drawable.atividadenaocompleta);
+
+        imgSentadoLeve.setImageResource(R.drawable.atividadenaocompleta);
+        imgSentadoModerado.setImageResource(R.drawable.atividadenaocompleta);
+        imgSentadoVigoroso.setImageResource(R.drawable.atividadenaocompleta);
+
+        imgDeitadoLeve.setImageResource(R.drawable.atividadenaocompleta);
+        imgDeitadoModerado.setImageResource(R.drawable.atividadenaocompleta);
+        imgDeitadoVigoroso.setImageResource(R.drawable.atividadenaocompleta);
+    }
 
     @Override
     protected void onPause() {
@@ -297,35 +355,35 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
        Calendar c =  Calendar.getInstance();
        String nomePasta;
 
-       if(((System.currentTimeMillis()-tempoStart)/1000) >= 60){
+       // ALTERAR PARA 60 APÓS OS TESTES
+       if(((System.currentTimeMillis()-tempoStart)/1000) >= 5){
            flagGravar = false;
            Gravar.setText("Gravar");
            Gravar.setBackgroundColor(Color.LTGRAY);
+           MarcaAtividadeFinalizada(flagAndando,flagDeitado,flagSentado,flagLeve,flagModerado,flagVigoroso);
        }
        //Crio o diretorio para salvar o arquivo
        try{
-           nomePasta = "//"+txtNome.getText().toString();
 
-           File dir = new File(Environment.getExternalStorageDirectory().getPath()+nomePasta);
            /*
            *    CONSERTAR BUG DE CRIAR PASTAS INFITNITAS!
-           * */
-           if(!dir.exists() && flagCriarPasta && flagGravar){
-              // dir.mkdirs();
-               flagCriarPasta = false;
-               Toast.makeText(this, "ENTROU IF", Toast.LENGTH_SHORT).show();
-           }else{
-               int i =0;
-               if(flagCriarPasta && flagGravar){
-                   do{
-                       nomePasta = "//CompMovel//"+txtNome.getText().toString()+i;
-                       dir = new File(Environment.getExternalStorageDirectory().getPath()+nomePasta);
-                       i++;
-                   }while ( dir.mkdirs());
+           */
+           if(flagCriarPasta){
+               nomePasta = "//CompMovel//"+txtNome.getText().toString();
+               dir = new File(Environment.getExternalStorageDirectory()+nomePasta);
 
-                //   dir.mkdirs();
-                   flagCriarPasta = false;
-                   Toast.makeText(this, "ENTROU ELSE", Toast.LENGTH_SHORT).show();
+               flagCriarPasta = false;
+               if(!dir.exists()){
+                   dir.mkdirs();
+               }else{
+                   int i =0;
+                       do{
+                           nomePasta = "//CompMovel//"+txtNome.getText().toString()+""+i;
+                           dir = new File(Environment.getExternalStorageDirectory()+nomePasta);
+                           i++;
+                       }while (!dir.mkdirs());
+
+                     dir.mkdirs();
                }
 
            }

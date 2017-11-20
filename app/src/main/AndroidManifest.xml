@@ -27,8 +27,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ColetaActivity" android:label="Reconhecimento de Atividades - Coleta" />
-        <activity android:name=".ReconhecimentoActivity"></activity>
+        <activity android:name=".ColetaActivity" android:label="@string/app_name" />
+        <activity android:name=".ReconhecimentoActivity" android:label="@string/app_name"></activity>
     </application>
 
 </manifest>

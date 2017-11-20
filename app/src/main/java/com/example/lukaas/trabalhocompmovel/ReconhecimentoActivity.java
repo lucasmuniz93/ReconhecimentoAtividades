@@ -34,16 +34,6 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
 
     // Layout
     private TextView atividade;
-    private TextView txtMediaX;
-    private TextView txtMediaY;
-    private TextView txtMediaZ;
-    private TextView txtVarX;
-    private TextView txtVarY;
-    private TextView txtVarZ;
-    private TextView txtRms;
-    private TextView txtTempoJanela;
-    private TextView txtTempo;
-    private TextView txtResposta;
     private ImageView imgAtividade;
     private Switch switchSom;
     private MediaPlayer mediaPlayer;
@@ -53,11 +43,6 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
     private Sensor mySensor;
     private SensorManager SM;
 
-    // Classe Weka que verifica a identidade e intensidade;
-    private WekaAtividade weka = new WekaAtividade();
-    private WekaIntensidadeAndando wekaIntensidadeAndando = new WekaIntensidadeAndando();
-    private WekaIntensidadeDeitado wekaIntensidadeDeitado = new WekaIntensidadeDeitado();
-    private WekaIntensidadeSentado wekaIntensidadeSentado = new WekaIntensidadeSentado();
 
     // Recebe o retorno da atividade/intensidade do weka
     private static double respostaAtividade = -1;
@@ -73,16 +58,7 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
         atividade = (TextView) findViewById(R.id.txtAtividade2);
         switchSom = (Switch) findViewById(R.id.switch2);
         imgAtividade = (ImageView) findViewById(R.id.imgAtividade);
-        txtMediaX = (TextView) findViewById(R.id.txtMediaX);
-        txtMediaY = (TextView) findViewById(R.id.txtMediaY);
-        txtMediaZ = (TextView) findViewById(R.id.txtMediaZ);
-        txtVarX = (TextView) findViewById(R.id.txtVarX);
-        txtVarY = (TextView) findViewById(R.id.txtVarY);
-        txtVarZ = (TextView) findViewById(R.id.txtVarZ);
-        txtRms = (TextView) findViewById(R.id.txtRms);
-        txtTempo = (TextView) findViewById(R.id.txtTempo);
-        txtTempoJanela = (TextView) findViewById(R.id.txtTempoJanela);
-        txtResposta = (TextView) findViewById(R.id.txtResposta);
+
 
         // Criar o Sensor Manager
         SM = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -92,7 +68,6 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
         SM.registerListener(this,mySensor,SensorManager.SENSOR_DELAY_NORMAL);
 
         tempoStart = System.currentTimeMillis();
-        txtTempoJanela.setText("" + TAMANHO_JANELA);
 
     }
     @Override
@@ -113,16 +88,6 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
             CalculaVariancia(arrayY,2, mediaY);
             CalculaVariancia(arrayZ,4, mediaZ);
             CalculaRMS(mediaX,mediaY,mediaZ,6);
-
-            txtMediaX.setText(""+parametros[1] );
-            txtMediaY.setText(""+parametros[3] );
-            txtMediaZ.setText(""+parametros[5] );
-
-            txtVarX.setText(""+parametros[0]);
-            txtVarY.setText(""+parametros[2]);
-            txtVarZ.setText(""+parametros[4]);
-
-            txtRms.setText(""+parametros[6]);
 
             // Envio para a classe do Weka o Object[]
             try {
@@ -264,8 +229,6 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
     private boolean VerificaJanela(){
         double t =(double) ((System.currentTimeMillis() - tempoStart)/1000);
 
-        txtTempo.setText(""+((System.currentTimeMillis() - tempoStart)/1000));
-
         if(t >= TAMANHO_JANELA ){
             tempoStart = System.currentTimeMillis();
             return true;
@@ -285,7 +248,6 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
 
     private double CalculaMedia(ArrayList<Float> array, int pos){
         int i = array.size();
-        txtResposta.setText(""+i);
         float total = 0;
 
         for(Float f : array){
@@ -351,7 +313,6 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
     @Override
     protected void onStart() {
         super.onStart();
-        Toast.makeText(this, "START", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -368,16 +329,5 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
 
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Toast.makeText(this, "STOP", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Toast.makeText(this, "DESTROY", Toast.LENGTH_SHORT).show();
-    }
 }
     
