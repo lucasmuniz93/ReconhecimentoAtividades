@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,21 +22,31 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/*
+*   Melhorar o sistema de criar pastas e atualizar o numero do aluno.
+*
+ */
+
 public class ColetaActivity extends AppCompatActivity implements SensorEventListener{
-    // Botões
-    private Button Gravar, Resetar, Andando, Deitado, Sentado, Leve, Moderado, Vigoroso;
-    // TextViews
-    private EditText txtNome;
-    //Imagens
+    // Apenas para identificar os aparelhos que foram utilizados no treinamento
+    private final int ID_APARELHO = 4;
+
+    // ---------------- Interface -------------------
+    // Imagens para marcar as atividades completas
     private ImageView imgAndandoLeve, imgAndandoModerado, imgAndandoVigoroso;
     private ImageView imgDeitadoLeve, imgDeitadoModerado, imgDeitadoVigoroso;
     private ImageView imgSentadoLeve, imgSentadoModerado, imgSentadoVigoroso;
+    private TextView txtNome;
+    private Button Gravar, Resetar, Andando, Deitado, Sentado, Leve, Moderado, Vigoroso;
 
-    //Flags
+    // --------------    Flags ---------------------
     private boolean flagGravar = false;
     private boolean flagLeve, flagModerado, flagVigoroso;
     private boolean flagAndando, flagDeitado, flagSentado;
     private boolean flagCriarPasta;
+    private boolean flagGyro;
+    private boolean flagStart;
+    private int numeroRegistros = ID_APARELHO;
 
     // Sensores
     private Sensor mySensor;
@@ -43,12 +54,16 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
 
     //Arquivo
     private File file;
-    File dir;
+    private File dir;
     private FileOutputStream arquivoSaida;
 
     // Cronometro
     private long tempoStart;
+    private long tempoEspera;
     private TextView Cronometro;
+
+    // Audio
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +80,8 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
         Gravar = (Button) findViewById(R.id.btnGravar);
         Resetar = (Button) findViewById(R.id.btnResetar);
 
-        txtNome = (EditText) findViewById(R.id.txtNome);
+        txtNome = (TextView) findViewById(R.id.txtNome);
+
 
         imgAndandoLeve = (ImageView) findViewById(R.id.imgAndandoLeveColeta);
         imgAndandoModerado = (ImageView) findViewById(R.id.imgAndandoModeradoColeta);
@@ -85,13 +101,30 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
         ResetarCorBotaoIntensidade();
         ResetarAtividadeFinalizada();
         flagCriarPasta = true;
+        flagStart = true;
+        txtNome.setText("Aluno "+numeroRegistros);
+
 
         // Criar o Sensor Manager
         SM = (SensorManager) getSystemService(SENSOR_SERVICE);
         // Acelerometro Sensor
         mySensor = SM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         // Registrar o listener
-        SM.registerListener(this,mySensor,SensorManager.SENSOR_DELAY_NORMAL);
+        SM.registerListener(this,mySensor,SensorManager.SENSOR_DELAY_FASTEST);
+
+        // Verifico se o aparelho possui gyroscopio
+        if(SM.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null){
+            flagGyro = true;
+            mySensor = SM.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+            SM.registerListener(this,mySensor,SensorManager.SENSOR_DELAY_FASTEST);
+        }
+
+        if(SM.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) != null){
+            mySensor= SM.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+            SM.registerListener(this,mySensor,SensorManager.SENSOR_DELAY_FASTEST);
+        }else{
+            Toast.makeText(this, "ROTATION VECTOR NÃO ENCONTRADO", Toast.LENGTH_SHORT).show();
+        }
 
         //OnClick
         Andando.setOnClickListener(new View.OnClickListener() {
@@ -180,6 +213,7 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
         Gravar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                txtNome.setText("Aluno "+numeroRegistros);
                 if(flagAndando || flagDeitado || flagSentado){
                     if(flagLeve || flagModerado || flagVigoroso ){
                         if(txtNome.getText().toString().equals("")){
@@ -196,9 +230,10 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
                 }
 
                 if (flagGravar){
+                    flagStart = true;
                     Gravar.setText("Gravando");
                     Gravar.setBackgroundColor(Color.GREEN);
-                    tempoStart = System.currentTimeMillis();
+                    tempoEspera = System.currentTimeMillis();
                 }else{
                     Gravar.setText("Gravar");
                     Gravar.setBackgroundColor(Color.LTGRAY);
@@ -215,7 +250,10 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
                 ResetarParamentroAtividade();
                 ResetarAtividadeFinalizada();
                 flagCriarPasta = true;
-                txtNome.setText("");
+                txtNome.setText("Aluno "+numeroRegistros);
+                flagGravar = false;
+                Gravar.setText("Gravar");
+                Gravar.setBackgroundColor(Color.LTGRAY);
             }
         });
 
@@ -223,21 +261,47 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
+        String x = "";
+        String y = "";
+        String z = "";
 
-        if(flagGravar) {
-            final String x = " " + sensorEvent.values[0];
-            final String y = " " + sensorEvent.values[1];
-            final String z = " " + sensorEvent.values[2];
-
-            final String atividade = VerificaAtividade();
-            final String intensidade = VerificaIntensidade();
-
-            //Salvar no Arquivo
             if (flagGravar) {
-                EscreverArquivo(atividade, intensidade, x, y, z);
-            }
-        }
+                final String atividade = VerificaAtividade();
+                final String intensidade = VerificaIntensidade();
 
+                // Aguardo 5 segundos antes de começar gravar
+                if(((System.currentTimeMillis()-tempoEspera)/1000)  >= 5) {
+                    // Toca um beep ao começar gravar
+                    if (flagStart) {
+                        ExecutarAudio(R.raw.beep);
+                        tempoStart = System.currentTimeMillis();
+                        flagStart = false;
+                    }
+                    // Verifico o tipo de sensor que está sendo utilizado no momento e
+                    // passo os dados para serem escritos no arquivos
+                    if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                        x = " " + sensorEvent.values[0];
+                        y = " " + sensorEvent.values[1];
+                        z = " " + sensorEvent.values[2];
+                        EscreverArquivo(atividade, intensidade, x, y, z, " a");
+                    }
+                    if (sensorEvent.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
+                        x = " " + sensorEvent.values[0];
+                        y = " " + sensorEvent.values[1];
+                        z = " " + sensorEvent.values[2];
+                        EscreverArquivo(atividade, intensidade, x, y, z, " g");
+                    }
+                    if (sensorEvent.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
+                        String r = "";
+
+                        x = " " + sensorEvent.values[0];
+                        y = " " + sensorEvent.values[1];
+                        z = " " + sensorEvent.values[2];
+                        r = " " + sensorEvent.values[3];
+                        EscreverArquivo(atividade, intensidade, x, y, z, " r");
+                    }
+                }
+            }
     }
 
    @Override
@@ -245,6 +309,7 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
 
     }
 
+    // Funções para resetar o sistema para os valores padrões
    private void ResetarParamentroAtividade(){
         flagAndando = false;
         flagDeitado = false;
@@ -297,8 +362,11 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
 
         return null;
     }
+    // Função que é chamada quando o tempo passar dos 60 seg, para marcar a atividade coletada como finalizada
    private void MarcaAtividadeFinalizada(boolean flagAndando, boolean flagDeitado, boolean flagSentado,
                                          boolean flagLeve, boolean flagModerado, boolean flagVigoroso){
+
+       ExecutarAudio(R.raw.beep);
 
        if(flagAndando){
            if(flagLeve){
@@ -324,10 +392,20 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
             }else if(flagVigoroso){
                 imgDeitadoVigoroso.setImageResource(R.drawable.atividadecompleta);
             }
-    }
+        }
 
-
+       ExecutarAudio(R.raw.beep);
    }
+
+   // Funçao para dar play no audio passado como parametro
+    private void ExecutarAudio(int nomeArquivo){
+
+            mediaPlayer = MediaPlayer.create(ColetaActivity.this,nomeArquivo);
+            if((mediaPlayer != null) && !(mediaPlayer.isPlaying())){
+                mediaPlayer.start();
+            }
+
+    }
 
     private  void  ResetarAtividadeFinalizada(){
 
@@ -351,61 +429,73 @@ public class ColetaActivity extends AppCompatActivity implements SensorEventList
         SM.unregisterListener(this, mySensor);
 
     }
-   private void EscreverArquivo(String atividade, String intensidade, String x, String y, String z){
-       Calendar c =  Calendar.getInstance();
-       String nomePasta;
 
-       // ALTERAR PARA 60 APÓS OS TESTES
-       if(((System.currentTimeMillis()-tempoStart)/1000) >= 5){
-           flagGravar = false;
-           Gravar.setText("Gravar");
-           Gravar.setBackgroundColor(Color.LTGRAY);
-           MarcaAtividadeFinalizada(flagAndando,flagDeitado,flagSentado,flagLeve,flagModerado,flagVigoroso);
-       }
-       //Crio o diretorio para salvar o arquivo
-       try{
+    // Funçao que faz a escrita dos dados no arquivo txt
+    private void EscreverArquivo(String atividade, String intensidade, String x, String y, String z, String sensor){
+        Calendar c =  Calendar.getInstance();
+        String nomePasta;
 
-           /*
-           *    CONSERTAR BUG DE CRIAR PASTAS INFITNITAS!
-           */
-           if(flagCriarPasta){
-               nomePasta = "//CompMovel//"+txtNome.getText().toString();
-               dir = new File(Environment.getExternalStorageDirectory()+nomePasta);
+        // Se o tempo passar de 60 segundos é feito um reset nos parametros e finalizada a gravação
+        if(((System.currentTimeMillis()-tempoStart)/1000) >= 60){
+            flagGravar = false;
+            Gravar.setText("Gravar");
+            Gravar.setBackgroundColor(Color.LTGRAY);
+            MarcaAtividadeFinalizada(flagAndando,flagDeitado,flagSentado,flagLeve,flagModerado,flagVigoroso);
+        }
 
-               flagCriarPasta = false;
-               if(!dir.exists()){
-                   dir.mkdirs();
-               }else{
-                   int i =0;
-                       do{
-                           nomePasta = "//CompMovel//"+txtNome.getText().toString()+""+i;
-                           dir = new File(Environment.getExternalStorageDirectory()+nomePasta);
-                           i++;
-                       }while (!dir.mkdirs());
+        //Crio o diretorio para salvar o arquivo
+        try{
+            // Se nesta gravação ainda não tiver criado a pasta, para evidar criar
+            // centenas de pastas durante a mesma gravação.
+            // É resetada com o botão limpar
+            if(flagCriarPasta){
+                nomePasta = "//CompMovel//Aluno"+ID_APARELHO;
+                dir = new File(Environment.getExternalStorageDirectory()+nomePasta);
 
-                     dir.mkdirs();
-               }
+                flagCriarPasta = false;
 
-           }
+                // Se não existir uma pasta com o nome Aluno x, então ela é criada
+                if(!dir.exists()){
+                    dir.mkdirs();
+                    txtNome.setText("Aluno "+numeroRegistros);
+                }else{
+                    // Caso existir vai incrimentando i até encontrar um nome válido
+                    int i = ID_APARELHO;
+                    do{
+                        nomePasta = "//CompMovel//Aluno"+i;
+                        dir = new File(Environment.getExternalStorageDirectory()+nomePasta);
+                        i += 4;
+                    }while (!dir.mkdirs());
+                    numeroRegistros = i;
+                    dir.mkdirs();
+                    txtNome.setText("Aluno "+numeroRegistros);
+                }
 
-           file = new File(dir,atividade+intensidade+".txt");
-           //True escreve no final do arquivo, false cria um novo
-           arquivoSaida =  new FileOutputStream(file,true);
-           String cronometro;
-           file.createNewFile();
-           Cronometro.setText((System.currentTimeMillis()-tempoStart)/1000+" de 60");
-           cronometro = " "+(System.currentTimeMillis()-tempoStart);
-           arquivoSaida.write(x.getBytes());
-           arquivoSaida.write(y.getBytes());
-           arquivoSaida.write(z.getBytes());
-           arquivoSaida.write(cronometro.getBytes());
-           arquivoSaida.write("\n".getBytes());
-           arquivoSaida.close();
+            }
 
-       }catch (IOException e) {
-           Log.i("Erro Arquivo", "Erro IO");
-           e.printStackTrace();
-       }
+            file = new File(dir,atividade+intensidade+".txt");
+            // True escreve no final do arquivo, false cria um novo
+            // Como a função é chamada toda hora no OnSensorChanged() tive que usar True
+            // se não só salvaria o último dado
+            arquivoSaida =  new FileOutputStream(file,true);
+            String cronometro;
+            file.createNewFile();
+            Cronometro.setText((System.currentTimeMillis()-tempoStart)/1000+" de 60");
+            cronometro = " "+(System.currentTimeMillis()-tempoStart);
+            // Parte que escrevo de fato no arquivo
+            arquivoSaida.write(x.getBytes());
+            arquivoSaida.write(y.getBytes());
+            arquivoSaida.write(z.getBytes());
+            arquivoSaida.write(cronometro.getBytes());
+            arquivoSaida.write(sensor.getBytes());
+            arquivoSaida.write("\n".getBytes());
+            arquivoSaida.close();
 
-   }
+        }catch (IOException e) {
+            Log.i("Erro Arquivo", "Erro IO");
+            e.printStackTrace();
+        }
+
+    }
+
 }

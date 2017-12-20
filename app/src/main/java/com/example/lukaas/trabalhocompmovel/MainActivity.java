@@ -14,23 +14,31 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try
+        {
+            this.getSupportActionBar().hide();
+        }
+        catch (NullPointerException e){}
+
         setContentView(R.layout.activity_principal);
 
         btnAnalisarAtividade = (Button) findViewById(R.id.btnAnalisarAtividade);
         btnColetarDados = (Button) findViewById(R.id.btnColetarDados);
 
+        // OnClick Chama a Reconhecimento
         btnAnalisarAtividade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this,ReconhecimentoActivity.class));
             }
         });
-
+        // OnClick Chama a Coleta
         btnColetarDados.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this,ColetaActivity.class));
             }
         });
+
     }
 }

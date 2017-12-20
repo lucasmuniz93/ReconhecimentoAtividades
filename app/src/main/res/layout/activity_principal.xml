@@ -9,36 +9,36 @@
 
     <Button
         android:id="@+id/btnColetarDados"
-        android:layout_width="128dip"
-        android:layout_height="128dip"
+        android:layout_width="162dp"
+        android:layout_height="58dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:text="Coletar Dados"
+        android:text="Treinamento"
         android:textColor="@android:color/background_dark"
-        android:textSize="18sp"
+        android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.176"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.755" />
+        app:layout_constraintVertical_bias="0.604" />
 
     <Button
         android:id="@+id/btnAnalisarAtividade"
-        android:layout_width="128dip"
-        android:layout_height="128dip"
+        android:layout_width="162dp"
+        android:layout_height="58dp"
         android:layout_marginBottom="8dp"
-        android:text="Analisar Atividade"
+        android:text="Reconhecimento"
         android:textColor="@android:color/background_dark"
-        android:textSize="18sp"
+        android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.848"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.758" />
+        app:layout_constraintVertical_bias="0.806" />
 
     <TextView
         android:id="@+id/textView7"
@@ -106,4 +106,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.328"
         app:srcCompat="@drawable/sentadomoderado" />
+
+    <Button
+        android:id="@+id/btnTeste"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TESTE"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="504dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintVertical_bias="0.511" />
 </android.support.constraint.ConstraintLayout>

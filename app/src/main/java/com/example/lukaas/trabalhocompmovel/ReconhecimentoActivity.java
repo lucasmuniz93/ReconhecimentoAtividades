@@ -81,6 +81,7 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
         if(VerificaJanela()){
 
             //Calculo das médias/variancias dos dados que estão nos arrays
+            // Os numeros são a posição de cada elemento no vetor parametro[]
             double mediaX = CalculaMedia(arrayX,1);
             double mediaY = CalculaMedia(arrayY,3);
             double mediaZ = CalculaMedia(arrayZ,5);
@@ -91,7 +92,7 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
 
             // Envio para a classe do Weka o Object[]
             try {
-                    respostaAtividade = WekaAtividade.classify(parametros);
+                respostaAtividade = WekaAtividade.classify(parametros);
                 // Toast.makeText(this, ""+ resposta, Toast.LENGTH_SHORT).show();
             }catch (Exception e){
                 Toast.makeText(this, ""+ e, Toast.LENGTH_SHORT).show();
@@ -225,7 +226,7 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
 
     }
 
-
+    // Função para verificar se o tempo decorrido é maior do que a janela
     private boolean VerificaJanela(){
         double t =(double) ((System.currentTimeMillis() - tempoStart)/1000);
 
@@ -318,7 +319,7 @@ public class ReconhecimentoActivity extends AppCompatActivity implements SensorE
     @Override
     protected void onPause() {
         super.onPause();
-        Toast.makeText(this, "PAUSE", Toast.LENGTH_SHORT).show();
+
         //Liberar os recusos utilizados pelo mediaPlayer ao fechar o aplicativo
         if ((mediaPlayer != null)) {
             mediaPlayer.stop();
