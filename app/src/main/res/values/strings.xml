@@ -1,3 +1,16 @@
 <resources>
-    <string name="app_name" >Atividade-Intensidade</string>
+    <string name="app_name">Atividade-Intensidade</string>
+    <string name="title_activity_analise_atividade">AnaliseAtividade</string>
+
+    <string name="walk0">Andando devagar</string>
+    <string name="walk1">Andando moderado</string>
+    <string name="walk2">Correndo</string>
+
+    <string name="sit0">Sentado tranquilo</string>
+    <string name="sit1">Sentado moderado</string>
+    <string name="sit2">Sentado movimentando</string>
+
+    <string name="lyingDonw0">Deitado tranquilo</string>
+    <string name="lyingDonw1">Deitado moderado</string>
+    <string name="lyingDonw2">Deitado movimentando</string>
 </resources>

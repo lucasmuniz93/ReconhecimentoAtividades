@@ -7,5 +7,6 @@
     <dimen name="ValorAtividadeIntensidade">20sp</dimen>
     <dimen name="TamanhoTextoColeta">18sp</dimen>
     <dimen name="TamanhoImgColeta15x15">15dip</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>
