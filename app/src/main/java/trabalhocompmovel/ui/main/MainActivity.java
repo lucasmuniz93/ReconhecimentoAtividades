@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import trabalhocompmovel.R;
 
 import trabalhocompmovel.ui.base.BaseActivity;
@@ -33,20 +35,19 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         btnAnalisarAtividade = (Button) findViewById(R.id.btnAnalisarAtividade);
         btnColetarDados = (Button) findViewById(R.id.btnColetarDados);
 
-        // OnClick Chama a Reconhecimento
-        btnAnalisarAtividade.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, ReconhecimentoActivity.class));
-            }
-        });
-        // OnClick Chama a Coleta
-        btnColetarDados.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, ColetaActivity.class));
-            }
-        });
+        ButterKnife.bind(this);
+    }
 
+    @OnClick(R.id.btnAnalisarAtividade)
+    public void checkActivity(){
+        swipeActivity(new Intent(MainActivity.this, ReconhecimentoActivity.class));
+    }
+    @OnClick(R.id.btnColetarDados)
+    public void getInputData(){
+        swipeActivity(new Intent(MainActivity.this, ColetaActivity.class));
+    }
+
+    public void swipeActivity(Intent intent){
+        startActivity(intent);
     }
 }
