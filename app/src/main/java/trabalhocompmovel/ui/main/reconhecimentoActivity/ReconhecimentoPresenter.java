@@ -3,6 +3,8 @@ package trabalhocompmovel.ui.main.reconhecimentoActivity;
 import android.hardware.SensorEvent;
 import android.util.Log;
 
+import io.reactivex.annotations.Nullable;
+import trabalhocompmovel.R;
 import trabalhocompmovel.WekaAtividade;
 import trabalhocompmovel.WekaIntensidadeAndando;
 import trabalhocompmovel.WekaIntensidadeDeitado;
@@ -58,10 +60,9 @@ public class ReconhecimentoPresenter <V extends ReconhecimentoMvpView> extends B
             // Envio para a classe do Weka o Object[]
             try {
                 respostaAtividade = WekaAtividade.classify(parametros);
-                Log.d("mylog respostaAtividade", Double.toString(respostaAtividade));
                 // Toast.makeText(this, ""+ resposta, Toast.LENGTH_SHORT).show();
             }catch (Exception e){
-                reconhecimentoActivity.onError(e);
+                getMvpView().onError(e);
             }
 
             // Verifica a resposta retornada pelo Weka e exibe na tela
@@ -129,17 +130,15 @@ public class ReconhecimentoPresenter <V extends ReconhecimentoMvpView> extends B
             try{
                 intensidade = WekaIntensidadeAndando.classify(parametros);
             }catch (Exception e){
-                reconhecimentoActivity.onError(e);
+                getMvpView().onError(e);
             }
 
             if(intensidade == 0){ // Andando Leve
-                reconhecimentoActivity.setAndandoLeve();
-
+                getMvpView().setAndandoLeve();
             }else if(intensidade == 1){ // Andando Moderado
-                reconhecimentoActivity.setAndandoModerado();
-
+                getMvpView().setAndandoModerado();
             }else if(intensidade == 2){ // Correndo
-                reconhecimentoActivity.setCorrendo();
+                getMvpView().setCorrendo();
             }
 
             // Sentado
@@ -147,34 +146,30 @@ public class ReconhecimentoPresenter <V extends ReconhecimentoMvpView> extends B
             try{
                 intensidade = WekaIntensidadeSentado.classify(parametros);
             }catch (Exception e){
-                reconhecimentoActivity.onError(e);
+                getMvpView().onError(e);
             }
 
             if(intensidade == 0){   // Sentado Leve
-                reconhecimentoActivity.setSentadoLeve();
-
+                getMvpView().setSentadoLeve();
             }else if(intensidade == 1){ //Sentado Moderado
-                reconhecimentoActivity.setSentadoModerado();
-
+                getMvpView().setSentadoModerado();
             }else if(intensidade == 2){ //Sentado Vigoroso
-                reconhecimentoActivity.setSentadoMovimentando();
+                getMvpView().setSentadoMovimentando();
             }
 
         }else if(p == 6 || p == 7 || p == 8){   //Deitado
             try{
                 intensidade = WekaIntensidadeDeitado.classify(parametros);
             }catch (Exception e){
-                reconhecimentoActivity.onError(e);
+                getMvpView().onError(e);
             }
+
             if(intensidade == 0){   //Deitado Leve
-                reconhecimentoActivity.setDeitadoLeve();
-
+                getMvpView().setDeitadoLeve();
             }else if(intensidade == 1){ // Deitado Moderado
-                reconhecimentoActivity.setDeitadoModerado();
-
-
+                getMvpView().setDeitadoModerado();
             }else  if(intensidade == 2) {    // Deitado Vigoroso
-                reconhecimentoActivity.setDeitadoMovimentando();
+                getMvpView().setDeitadoMovimentando();
             }
         }
 

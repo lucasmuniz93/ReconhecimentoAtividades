@@ -3,6 +3,7 @@ package trabalhocompmovel.ui.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import trabalhocompmovel.di.component.ActivityComponent;
 import trabalhocompmovel.di.component.DaggerActivityComponent;
@@ -28,5 +29,13 @@ public class BaseActivity extends AppCompatActivity implements MvpView {
         return mActivityComponent;
     }
 
+    @Override
+    public void showMessage(String message) {
+        if (message != null) {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "No error message", Toast.LENGTH_SHORT).show();
+        }
+    }
 
 }

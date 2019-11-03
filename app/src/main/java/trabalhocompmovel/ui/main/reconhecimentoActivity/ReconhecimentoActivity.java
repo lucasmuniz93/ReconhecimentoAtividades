@@ -6,6 +6,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -29,13 +30,8 @@ public class ReconhecimentoActivity extends BaseActivity implements Reconhecimen
     private long startTime = 0;
 
     // Layout
-    @BindView(R.id.txtAtividade2)
     TextView atividade;
-
-    @BindView(R.id.imgAtividade)
     ImageView imgAtividade;
-
-    @BindView(R.id.switch2)
     Switch switchSom;
 
     private MediaPlayer mediaPlayer;
@@ -56,6 +52,10 @@ public class ReconhecimentoActivity extends BaseActivity implements Reconhecimen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reconhecimento);
 
+        this.atividade = findViewById(R.id.txtAtividade2);
+        this.imgAtividade = findViewById(R.id.imgAtividade);
+        this.switchSom = findViewById(R.id.switch2);
+
         ButterKnife.bind(this);
 
         getActivityComponent().inject(this);
@@ -74,8 +74,7 @@ public class ReconhecimentoActivity extends BaseActivity implements Reconhecimen
     }
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-
-         //mPresenter.sensorChanged(sensorEvent, VerificaJanela());
+         mPresenter.sensorChanged(sensorEvent, VerificaJanela());
     }
 
     @Override
@@ -125,88 +124,68 @@ public class ReconhecimentoActivity extends BaseActivity implements Reconhecimen
 
     }
 
+    @Override
     public void onError(Exception e){
         Toast.makeText(this, ""+ e, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
     public void setAndandoLeve() {
-        atividade.setText(getResources().getString(R.string.walk0));
-        imgAtividade.setImageResource(R.drawable.andandoleve);
-        if(switchSom.isChecked()){
-            ExecutarAudio(R.raw.andandoleve);
-        }
+        setActivity(getResources().getString(R.string.walk0), R.drawable.andandoleve, R.raw.andandoleve);
     }
 
-
+    @Override
     public void setAndandoModerado() {
-        atividade.setText(getResources().getString(R.string.walk1));
-        imgAtividade.setImageResource(R.drawable.andandomoderado);
-
-        if(switchSom.isChecked()){
-            ExecutarAudio(R.raw.andandomoderado);
-        }
+        setActivity(getResources().getString(R.string.walk1), R.drawable.andandomoderado, R.raw.andandomoderado);
     }
 
+    @Override
     public void setCorrendo() {
-        atividade.setText(getResources().getString(R.string.walk2));
-        imgAtividade.setImageResource(R.drawable.andandovigoroso);
-
-        if(switchSom.isChecked()){
-            ExecutarAudio(R.raw.andandovigoroso);
-        }
+        setActivity(getResources().getString(R.string.walk2), R.drawable.andandovigoroso, R.raw.andandovigoroso);
     }
 
+    @Override
     public void setSentadoLeve() {
-        atividade.setText(getResources().getString(R.string.sit0));
-        imgAtividade.setImageResource(R.drawable.sentadoleve);
-
-        if(switchSom.isChecked()){
-            ExecutarAudio(R.raw.sentadoleve);
-        }
+        setActivity(getResources().getString(R.string.sit0), R.drawable.sentadoleve, R.raw.sentadoleve);
     }
 
+    @Override
     public void setSentadoModerado() {
-        atividade.setText(getResources().getString(R.string.sit1));
-        imgAtividade.setImageResource(R.drawable.sentadomoderado);
-
-        if(switchSom.isChecked()){
-            ExecutarAudio(R.raw.sentadomoderado);
-        }
+        setActivity(getResources().getString(R.string.sit1), R.drawable.sentadomoderado, R.raw.sentadomoderado);
     }
 
+    @Override
     public void setSentadoMovimentando() {
-        atividade.setText(getResources().getString(R.string.sit2));
-        imgAtividade.setImageResource(R.drawable.sentadovigoroso);
-
-        if(switchSom.isChecked()){
-            ExecutarAudio(R.raw.sentadovigoroso);
-        }
+        setActivity(getResources().getString(R.string.sit2), R.drawable.sentadovigoroso, R.raw.sentadovigoroso);
     }
+
+    @Override
     public void setDeitadoLeve() {
-        atividade.setText(getResources().getString(R.string.lyingDonw0));
-        imgAtividade.setImageResource(R.drawable.deitadoleve);
-
-        if(switchSom.isChecked()){
-            ExecutarAudio(R.raw.deitadoleve);
-        }
+        setActivity(getResources().getString(R.string.lyingDonw0), R.drawable.deitadoleve, R.raw.deitadoleve);
     }
 
+    @Override
     public void setDeitadoModerado() {
-        atividade.setText(getResources().getString(R.string.lyingDonw1));
-        imgAtividade.setImageResource(R.drawable.deitadoleve);
-
-        if(switchSom.isChecked()){
-            ExecutarAudio(R.raw.deitadomoderado);
-        }
+        setActivity(getResources().getString(R.string.lyingDonw1), R.drawable.deitadomoderado, R.raw.deitadomoderado);
     }
 
+    @Override
     public void setDeitadoMovimentando() {
-        atividade.setText(getResources().getString(R.string.lyingDonw2));
-        imgAtividade.setImageResource(R.drawable.deitadoleve);
+        setActivity(getResources().getString(R.string.lyingDonw2), R.drawable.deitadovigoroso, R.raw.deitadovigoroso);
+    }
 
-        if(switchSom.isChecked()){
-            ExecutarAudio(R.raw.deitadovigoroso);
+    private void setActivity(String activityName, int activityImagge, int activitySound) {
+        atividade.setText(activityName);
+        imgAtividade.setImageResource(activityImagge);
+
+        if(playSound()){
+            ExecutarAudio(activitySound);
         }
     }
+
+    private boolean playSound() {
+        return switchSom.isChecked();
+    }
+
 }
     
