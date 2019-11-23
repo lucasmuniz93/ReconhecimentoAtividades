@@ -6,7 +6,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -19,7 +18,6 @@ import trabalhocompmovel.ui.base.BaseActivity;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static trabalhocompmovel.utils.AppConstants.FRAME_TIME;
@@ -60,21 +58,21 @@ public class ReconhecimentoActivity extends BaseActivity implements Reconhecimen
 
         getActivityComponent().inject(this);
 
-        mPresenter.onAttach(this);
+        this.mPresenter.onAttach(this);
 
         // Criar o Sensor Manager
-        SM = (SensorManager) getSystemService(SENSOR_SERVICE);
+        this.SM = (SensorManager) getSystemService(SENSOR_SERVICE);
         // Acelerometro Sensor
-        mySensor = SM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        this.mySensor = SM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         // Registrar o listener
-        SM.registerListener(this,mySensor,SensorManager.SENSOR_DELAY_NORMAL);
+        this.SM.registerListener(this,mySensor,SensorManager.SENSOR_DELAY_NORMAL);
 
-        startTime = System.currentTimeMillis();
+        this.startTime = System.currentTimeMillis();
 
     }
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-         mPresenter.sensorChanged(sensorEvent, VerificaJanela());
+         mPresenter.sensorChanged(sensorEvent, checkTime());
     }
 
     @Override
@@ -82,11 +80,11 @@ public class ReconhecimentoActivity extends BaseActivity implements Reconhecimen
 
     }
 
-    private boolean VerificaJanela(){
-        double t =(double) ((System.currentTimeMillis() - startTime)/1000);
+    private boolean checkTime(){
+        double time =(double) ((System.currentTimeMillis() - startTime)/1000);
 
-        if(t >= FRAME_TIME ){
-            startTime = System.currentTimeMillis();
+        if(time >= FRAME_TIME ){
+            this.startTime = System.currentTimeMillis();
             return true;
         }
         return false;

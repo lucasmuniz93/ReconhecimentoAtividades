@@ -3,8 +3,6 @@ package trabalhocompmovel.ui.main.reconhecimentoActivity;
 import android.hardware.SensorEvent;
 import android.util.Log;
 
-import io.reactivex.annotations.Nullable;
-import trabalhocompmovel.R;
 import trabalhocompmovel.WekaAtividade;
 import trabalhocompmovel.WekaIntensidadeAndando;
 import trabalhocompmovel.WekaIntensidadeDeitado;
@@ -26,7 +24,6 @@ public class ReconhecimentoPresenter <V extends ReconhecimentoMvpView> extends B
         implements ReconhecimentoMvpPresenter<V>  {
 
     private static Object[] parametros = new Object[7];
-    ReconhecimentoActivity reconhecimentoActivity = new ReconhecimentoActivity();
 
     // Recebe o retorno da atividade/intensidade d Object[7];
     //    ReconhecimentoActivity reconhecimentoActivity = new ReconhecimentoActivity();o weka

@@ -3,7 +3,6 @@ package trabalhocompmovel.data.db;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import trabalhocompmovel.data.db.DbHelper;
 import trabalhocompmovel.di.ApplicationContext;
 
 import javax.inject.Inject;

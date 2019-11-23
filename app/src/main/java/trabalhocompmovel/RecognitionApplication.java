@@ -11,7 +11,7 @@ import trabalhocompmovel.di.module.ApplicationModule;
 import trabalhocompmovel.ui.base.BaseApplication;
 
 
-public class MoviesListApplication extends Application implements BaseApplication {
+public class RecognitionApplication extends Application implements BaseApplication {
 
     @Inject
     DataManager mDataManager;
@@ -28,7 +28,7 @@ public class MoviesListApplication extends Application implements BaseApplicatio
             mApplicationComponent = DaggerApplicationComponent.builder()
                     .applicationModule(new ApplicationModule(this))
                     .build();
-            mApplicationComponent.inject(MoviesListApplication.this);
+            mApplicationComponent.inject(RecognitionApplication.this);
         }
 
     }

@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 
-import trabalhocompmovel.MoviesListApplication;
+import trabalhocompmovel.RecognitionApplication;
 import trabalhocompmovel.data.DataManager;
 import trabalhocompmovel.di.ApplicationContext;
 import trabalhocompmovel.di.module.ApplicationModule;
@@ -17,7 +17,7 @@ import dagger.Component;
 @Component(modules = ApplicationModule.class)
 public interface ApplicationComponent {
 
-    void inject(MoviesListApplication app);
+    void inject(RecognitionApplication app);
 
     @ApplicationContext
     Context context();
